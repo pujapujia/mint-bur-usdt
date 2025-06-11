@@ -11,10 +11,15 @@ const txCode = txInfo.querySelector('code');
 
 const CHIPS_TESTNET = {
   chainId: '0x2ca', // Hex untuk chainId 714
-  chainName: 'CHIP DEV', // Nama jaringan sesuai saran @chipsprotocol
-  rpcUrls: ['https://chips-rpc-proxy.farahazarii70.workers.dev/'], // Gunakan HTTPS berdasarkan saran
+  chainName: 'CHIP DEV',
+  rpcUrls: ['https://chips-rpc-proxy.farahazarii70.workers.dev/'], // Ganti dengan URL Worker kamu
   nativeCurrency: { name: 'CHIPS', symbol: 'CHIPS', decimals: 18 }
 };
+
+// Gunakan HTTPS RPC URL via Cloudflare Worker
+jsonRpcProvider = new ethers.providers.JsonRpcProvider('https://chips-rpc-proxy.your-username.workers.dev', {
+  chainId: 714,
+});
 
 // Alamat kontrak (pastikan sudah benar setelah deploy)
 const FEE_RECEIVER = typeof ethers !== 'undefined' ? ethers.utils.getAddress("0x0079352b27fDce7DDB744644dEFBcdB99cb5A9b9") : "0x0079352b27fDce7DDB744644dEFBcdB99cb5A9b9";
