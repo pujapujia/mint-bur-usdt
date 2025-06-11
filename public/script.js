@@ -11,13 +11,12 @@ const txCode = txInfo.querySelector('code');
 
 const CHIPS_TESTNET = {
   chainId: '0x2ca', // Hex untuk chainId 714
-  chainName: 'CHIPS Testnet',
-  // Ganti dengan RPC URL HTTPS jika tersedia
-  rpcUrls: ['https://rpc.chips-testnet.com'], // Placeholder, ganti dengan URL HTTPS yang valid
+  chainName: 'CHIP DEV', // Nama jaringan sesuai saran @chipsprotocol
+  rpcUrls: ['https://20.63.3.101:8545'], // Gunakan HTTPS berdasarkan saran
   nativeCurrency: { name: 'CHIPS', symbol: 'CHIPS', decimals: 18 }
 };
 
-// Alamat kontrak (update setelah deploy)
+// Alamat kontrak (pastikan sudah benar setelah deploy)
 const FEE_RECEIVER = typeof ethers !== 'undefined' ? ethers.utils.getAddress("0x0079352b27fDce7DDB744644dEFBcdB99cb5A9b9") : "0x0079352b27fDce7DDB744644dEFBcdB99cb5A9b9";
 let USDT_ADDRESS = "0x47C9e3E4078Edb31b24C72AF65d64dA21041801E"; // Placeholder
 let DEX_ADDRESS = "0x473fBeB25eE782b088e3F921031108B8D5DD44d2"; // Placeholder
@@ -128,14 +127,14 @@ let provider, jsonRpcProvider, signer, account;
 let isConnecting = false;
 
 // Gunakan HTTPS RPC URL
-jsonRpcProvider = new ethers.providers.JsonRpcProvider('https://rpc.chips-testnet.com', {
+jsonRpcProvider = new ethers.providers.JsonRpcProvider('https://20.63.3.101:8545', {
   chainId: 714,
 });
 
 async function checkWalletConnection() {
   if (!provider || !window.ethereum || isConnecting) return;
   try {
-    const network = await provider.getNetwork();
+    const network = await provider.getNetwork().catch(() => ({ chainId: 714, name: 'unknown' }));
     if (network.chainId !== 714) {
       console.warn('Wrong network, switching...');
       await window.ethereum.request({
@@ -269,9 +268,12 @@ async function initiateMint() {
     const fee = ethers.utils.parseEther("0.1");
     const nonce = await provider.getTransactionCount(account, 'pending');
 
-    const code = await jsonRpcProvider.getCode(DEX_ADDRESS).catch(() => '0x');
+    const code = await jsonRpcProvider.getCode(DEX_ADDRESS).catch((err) => {
+      console.error('Failed to fetch contract code:', err);
+      return '0x';
+    });
     if (code === '0x') {
-      throw new Error('DEX contract not found at the specified address.');
+      throw new Error('DEX contract not found at the specified address. Please verify the contract address and network.');
     }
 
     const tx = await contract.mintUsdt(amount, {
@@ -325,9 +327,12 @@ async function initiateBurn() {
       nonce++;
     }
 
-    const code = await jsonRpcProvider.getCode(DEX_ADDRESS).catch(() => '0x');
+    const code = await jsonRpcProvider.getCode(DEX_ADDRESS).catch((err) => {
+      console.error('Failed to fetch contract code:', err);
+      return '0x';
+    });
     if (code === '0x') {
-      throw new Error('DEX contract not found at the specified address.');
+      throw new Error('DEX contract not found at the specified address. Please verify the contract address and network.');
     }
 
     const tx = await contract.burnUsdt(amount, {
