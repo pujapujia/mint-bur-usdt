@@ -12,7 +12,7 @@ const txCode = txInfo.querySelector('code');
 const CHIPS_TESTNET = {
   chainId: '0x2ca', // Hex untuk chainId 714
   chainName: 'CHIP DEV',
-  rpcUrls: ['https://chips-rpc-proxy.farahazarii70.workers.dev'], // Cloudflare Worker URL
+  rpcUrls: ['https://holistic-purple-period.glitch.me'], // Cloudflare Worker URL
   nativeCurrency: { name: 'CHIPS', symbol: 'CHIPS', decimals: 18 }
 };
 
@@ -25,7 +25,7 @@ const DEX_ADDRESS = "0x473fBeB25eE782b088e3F921031108B8D5DD44d2"; // Placeholder
 let provider, jsonRpcProvider, signer, account;
 let isConnecting = false;
 
-jsonRpcProvider = new ethers.providers.JsonRpcProvider('https://chips-rpc-proxy.farahazarii70.workers.dev', {
+jsonRpcProvider = new ethers.providers.JsonRpcProvider('https://holistic-purple-period.glitch.me', {
   chainId: 714,
 });
 
