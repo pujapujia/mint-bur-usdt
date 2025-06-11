@@ -12,19 +12,22 @@ const txCode = txInfo.querySelector('code');
 const CHIPS_TESTNET = {
   chainId: '0x2ca', // Hex untuk chainId 714
   chainName: 'CHIP DEV',
-  rpcUrls: ['https://chips-rpc-proxy.farahazarii70.workers.dev/'], // Ganti dengan URL Worker kamu
+  rpcUrls: ['https://chips-rpc-proxy.farahazarii70.workers.dev'], // Cloudflare Worker URL
   nativeCurrency: { name: 'CHIPS', symbol: 'CHIPS', decimals: 18 }
 };
 
-// Gunakan HTTPS RPC URL via Cloudflare Worker
-jsonRpcProvider = new ethers.providers.JsonRpcProvider('https://chips-rpc-proxy.your-username.workers.dev', {
+// Alamat kontrak (pastikan sudah benar)
+const FEE_RECEIVER = typeof ethers !== 'undefined' ? ethers.utils.getAddress("0x0079352b27fDce7DDB744644dEFBcdB99cb5A9b9") : "0x0079352b27fDce7DDB744644dEFBcdB99cb5A9b9";
+const USDT_ADDRESS = "0x47C9e3E4078Edb31b24C72AF65d64dA21041801E"; // Placeholder
+const DEX_ADDRESS = "0x473fBeB25eE782b088e3F921031108B8D5DD44d2"; // Placeholder
+
+// Inisialisasi jsonRpcProvider setelah semua konstanta
+let provider, jsonRpcProvider, signer, account;
+let isConnecting = false;
+
+jsonRpcProvider = new ethers.providers.JsonRpcProvider('https://chips-rpc-proxy.farahazarii70.workers.dev', {
   chainId: 714,
 });
-
-// Alamat kontrak (pastikan sudah benar setelah deploy)
-const FEE_RECEIVER = typeof ethers !== 'undefined' ? ethers.utils.getAddress("0x0079352b27fDce7DDB744644dEFBcdB99cb5A9b9") : "0x0079352b27fDce7DDB744644dEFBcdB99cb5A9b9";
-let USDT_ADDRESS = "0x47C9e3E4078Edb31b24C72AF65d64dA21041801E"; // Placeholder
-let DEX_ADDRESS = "0x473fBeB25eE782b088e3F921031108B8D5DD44d2"; // Placeholder
 
 console.log('Using addresses:', { FEE_RECEIVER, USDT_ADDRESS, DEX_ADDRESS });
 
@@ -126,14 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   actionBox.style.display = 'block';
   setInterval(checkWalletConnection, 10000);
-});
-
-let provider, jsonRpcProvider, signer, account;
-let isConnecting = false;
-
-// Gunakan HTTPS RPC URL
-jsonRpcProvider = new ethers.providers.JsonRpcProvider('https://20.63.3.101:8545', {
-  chainId: 714,
 });
 
 async function checkWalletConnection() {
