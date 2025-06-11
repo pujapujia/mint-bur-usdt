@@ -12,7 +12,7 @@ const txCode = txInfo.querySelector('code');
 const CHIPS_TESTNET = {
   chainId: '0x2ca', // Hex untuk chainId 714
   chainName: 'CHIP DEV', // Nama jaringan sesuai saran @chipsprotocol
-  rpcUrls: ['https://20.63.3.101:8545'], // Gunakan HTTPS berdasarkan saran
+  rpcUrls: ['https://chips-rpc-proxy.farahazarii70.workers.dev/'], // Gunakan HTTPS berdasarkan saran
   nativeCurrency: { name: 'CHIPS', symbol: 'CHIPS', decimals: 18 }
 };
 
